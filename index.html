@@ -1,53 +1,61 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <title>Pixel Converter Pro VIP</title>
+  <meta charset="UTF-8">
+  <title>Pixel Converter Pro Vip Maximum™</title>
+  <link rel="stylesheet" href="style.css">
   <style>
     body {
-      font-family: 'Courier New', monospace;
-      background-color: #1a1a1a;
+      background: #111;
       color: #fff;
+      font-family: 'Courier New', monospace;
       text-align: center;
-      padding: 20px;
+      padding: 30px;
     }
-
-    input[type="file"], button {
-      margin-top: 15px;
-      padding: 10px 20px;
-      border-radius: 10px;
-      border: none;
-      font-weight: bold;
-      cursor: pointer;
-      font-size: 16px;
+    h1 {
+      font-size: 2rem;
+      margin-bottom: 20px;
     }
-
-    input[type="file"] {
-      background: hotpink;
-      color: white;
-    }
-
-    button {
-      background: #00e5ff;
-      color: black;
-      margin-left: 10px;
-    }
-
     canvas {
-      margin-top: 30px;
-      border: 2px solid hotpink;
-      image-rendering: pixelated;
-      max-width: 100%;
+      margin-top: 20px;
+      border: 2px dashed #fff;
+      max-width: 90%;
+    }
+    button, select, input[type="file"] {
+      margin: 10px;
+      padding: 12px 20px;
+      font-size: 1rem;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+    }
+    #convertBtn {
+      background-color: #00ffaa;
+    }
+    #exportBtn {
+      background-color: #ff69b4;
     }
   </style>
 </head>
 <body>
-  <h1>🌸 Pixel Converter Pro VIP Maximum 🌸</h1>
-  <p>Chọn ảnh → Bấm nút để hoá pixel cực nghệ</p>
-  <input type="file" id="fileInput" accept="image/*">
-  <button onclick="handleConvert()">Convert Ảnh Thành Pixel</button>
-  <br>
+
+  <h1>✨ Pixel Converter Pro Vip Maximum™</h1>
+
+  <input type="file" id="fileInput" accept="image/*"><br>
+
+  <select id="filterSelect">
+    <option value="none">-- Không filter --</option>
+    <option value="gameboy">GameBoy</option>
+    <option value="lava">Lava</option>
+    <option value="pastel">Pastel</option>
+  </select><br>
+
+  <button id="convertBtn" onclick="handleConvert()">Convert Ngay 💫</button>
+  <button id="exportBtn">Xuất ảnh 📥</button>
+
   <canvas id="previewCanvas"></canvas>
+
+  <audio id="bgm" src="cute-music.mp3" loop></audio>
 
   <script src="script.js"></script>
 </body>
