@@ -1,37 +1,101 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Pixel Converter Pro Vip Maximum™</title>
   <style>
     body {
-      background: #111;
-      color: #fff;
-      font-family: monospace;
+      background-color: #111;
+      color: white;
+      font-family: 'Courier New', monospace;
       text-align: center;
       padding: 20px;
     }
-    canvas {
-      border: 2px dashed #fff;
-      margin-top: 20px;
+
+    h1 {
+      font-size: 1.5em;
+      margin-bottom: 1em;
     }
+
+    input[type="file"] {
+      margin-bottom: 10px;
+    }
+
     button {
       padding: 10px 20px;
-      margin: 10px;
-      font-size: 16px;
+      margin: 5px;
+      border: none;
+      border-radius: 10px;
       cursor: pointer;
+      font-weight: bold;
     }
-    #convertBtn { background-color: #00ffaa; }
-    #exportBtn { background-color: #ff69b4; }
+
+    .convert {
+      background-color: #0f0;
+      color: black;
+    }
+
+    .export {
+      background-color: #f0f;
+      color: black;
+    }
+
+    canvas {
+      margin-top: 20px;
+      border-radius: 10px;
+    }
   </style>
 </head>
+
 <body>
   <h1>✨ Pixel Converter Pro Vip Maximum™</h1>
-  <input type="file" id="fileInput" accept="image/*"><br>
-  <button id="convertBtn">Convert Ngay 💫</button>
-  <button id="exportBtn">Xuất ảnh 📥</button><br>
-  <canvas id="previewCanvas"></canvas>
+  <input type="file" id="upload" accept="image/*,video/*">
+  <br />
+  <button class="convert" onclick="convertImage()">Convert Ngay 🐣</button>
+  <button class="export" onclick="exportImage()">Xuất ảnh 📸</button>
+  <br />
+  <canvas id="canvas"></canvas>
 
-  <script src="script.js"></script>
+  <script>
+    const upload = document.getElementById('upload');
+    const canvas = document.getElementById('canvas');
+    const ctx = canvas.getContext('2d');
+
+    function convertImage() {
+      const file = upload.files[0];
+      if (!file) return alert("Chọn ảnh cái đã!");
+
+      const reader = new FileReader();
+      reader.onload = function (event) {
+        const img = new Image();
+        img.onload = function () {
+          const scale = 0.08;
+          canvas.width = img.width * scale;
+          canvas.height = img.height * scale;
+          ctx.imageSmoothingEnabled = false;
+          ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+          const temp = ctx.getImageData(0, 0, canvas.width, canvas.height);
+
+          canvas.width = img.width;
+          canvas.height = img.height;
+          ctx.imageSmoothingEnabled = false;
+          ctx.putImageData(temp, 0, 0);
+          ctx.drawImage(canvas, 0, 0, img.width, img.height);
+        };
+        img.src = event.target.result;
+      };
+      reader.readAsDataURL(file);
+    }
+
+    function exportImage() {
+      const link = document.createElement('a');
+      link.download = 'pixel-image.png';
+      link.href = canvas.toDataURL();
+      link.click();
+    }
+  </script>
 </body>
+
 </html>
