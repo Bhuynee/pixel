@@ -3,7 +3,6 @@
 <head>
   <meta charset="UTF-8">
   <title>Pixel Converter Pro Vip Maximum™</title>
-  <link rel="stylesheet" href="style.css">
   <style>
     body {
       background: #111;
@@ -50,13 +49,30 @@
     <option value="pastel">Pastel</option>
   </select><br>
 
-  <button id="convertBtn" onclick="handleConvert()">Convert Ngay 💫</button>
+  <button id="convertBtn">Convert Ngay 💫</button>
   <button id="exportBtn">Xuất ảnh 📥</button>
 
   <canvas id="previewCanvas"></canvas>
 
-  <audio id="bgm" src="cute-music.mp3" loop></audio>
+  <audio id="bgm" src="cute-music.mp3" autoplay loop></audio>
 
   <script src="script.js"></script>
+  <script>
+    const convertBtn = document.getElementById("convertBtn");
+    const fileInput = document.getElementById("fileInput");
+    let currentFile = null;
+
+    fileInput.addEventListener("change", (e) => {
+      currentFile = e.target.files[0];
+    });
+
+    convertBtn.addEventListener("click", () => {
+      if (currentFile) {
+        convertToPixel(currentFile);
+      } else {
+        alert("Chưa chọn ảnh nè bạn ơi!");
+      }
+    });
+  </script>
 </body>
 </html>
