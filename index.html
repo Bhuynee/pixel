@@ -7,72 +7,31 @@
     body {
       background: #111;
       color: #fff;
-      font-family: 'Courier New', monospace;
+      font-family: monospace;
       text-align: center;
-      padding: 30px;
-    }
-    h1 {
-      font-size: 2rem;
-      margin-bottom: 20px;
+      padding: 20px;
     }
     canvas {
-      margin-top: 20px;
       border: 2px dashed #fff;
-      max-width: 90%;
+      margin-top: 20px;
     }
-    button, select, input[type="file"] {
+    button {
+      padding: 10px 20px;
       margin: 10px;
-      padding: 12px 20px;
-      font-size: 1rem;
-      border: none;
-      border-radius: 10px;
+      font-size: 16px;
       cursor: pointer;
     }
-    #convertBtn {
-      background-color: #00ffaa;
-    }
-    #exportBtn {
-      background-color: #ff69b4;
-    }
+    #convertBtn { background-color: #00ffaa; }
+    #exportBtn { background-color: #ff69b4; }
   </style>
 </head>
 <body>
-
   <h1>✨ Pixel Converter Pro Vip Maximum™</h1>
-
   <input type="file" id="fileInput" accept="image/*"><br>
-
-  <select id="filterSelect">
-    <option value="none">-- Không filter --</option>
-    <option value="gameboy">GameBoy</option>
-    <option value="lava">Lava</option>
-    <option value="pastel">Pastel</option>
-  </select><br>
-
   <button id="convertBtn">Convert Ngay 💫</button>
-  <button id="exportBtn">Xuất ảnh 📥</button>
-
+  <button id="exportBtn">Xuất ảnh 📥</button><br>
   <canvas id="previewCanvas"></canvas>
 
-  <audio id="bgm" src="cute-music.mp3" autoplay loop></audio>
-
   <script src="script.js"></script>
-  <script>
-    const convertBtn = document.getElementById("convertBtn");
-    const fileInput = document.getElementById("fileInput");
-    let currentFile = null;
-
-    fileInput.addEventListener("change", (e) => {
-      currentFile = e.target.files[0];
-    });
-
-    convertBtn.addEventListener("click", () => {
-      if (currentFile) {
-        convertToPixel(currentFile);
-      } else {
-        alert("Chưa chọn ảnh nè bạn ơi!");
-      }
-    });
-  </script>
 </body>
 </html>
