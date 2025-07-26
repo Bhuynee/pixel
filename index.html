@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
   <title>Pixel Converter Pro VIP</title>
   <style>
     body {
@@ -12,14 +12,25 @@
       padding: 20px;
     }
 
-    input[type="file"] {
-      margin-top: 20px;
-      background: hotpink;
-      color: white;
-      padding: 10px;
+    input[type="file"], button {
+      margin-top: 15px;
+      padding: 10px 20px;
       border-radius: 10px;
       border: none;
+      font-weight: bold;
       cursor: pointer;
+      font-size: 16px;
+    }
+
+    input[type="file"] {
+      background: hotpink;
+      color: white;
+    }
+
+    button {
+      background: #00e5ff;
+      color: black;
+      margin-left: 10px;
     }
 
     canvas {
@@ -32,8 +43,9 @@
 </head>
 <body>
   <h1>🌸 Pixel Converter Pro VIP Maximum 🌸</h1>
-  <p>Chọn một ảnh bất kỳ để hoá pixel nghệ thuật!</p>
+  <p>Chọn ảnh → Bấm nút để hoá pixel cực nghệ</p>
   <input type="file" id="fileInput" accept="image/*">
+  <button onclick="handleConvert()">Convert Ảnh Thành Pixel</button>
   <br>
   <canvas id="previewCanvas"></canvas>
 
