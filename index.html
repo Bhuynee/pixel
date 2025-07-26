@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Pixel Converter Pro Vip Maximum</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <audio id="bg-music" loop autoplay>
+    <source src="music/cute.mp3" type="audio/mpeg" />
+  </audio>
+
+  <div class="container">
+    <h1>🌈 Pixel Converter Pro Vip Maximum 🌟</h1>
+    <input type="file" id="fileInput" accept="image/*,video/*" />
+
+    <div class="options">
+      <label>Độ pixel:
+        <input type="range" min="2" max="50" value="10" id="pixelRange" />
+      </label>
+      <label>Bộ lọc:
+        <select id="filterSelect">
+          <option value="none">Không</option>
+          <option value="gameboy">GameBoy</option>
+          <option value="lava">Lava</option>
+          <option value="pastel">Pastel</option>
+        </select>
+      </label>
+    </div>
+
+    <div class="preview" id="previewArea">Xem trước sẽ hiện ở đây 📸</div>
+
+    <div class="actions">
+      <button id="convertBtn">✨ Convert Ngay!</button>
+      <button id="exportGif">🎞 Xuất GIF</button>
+      <button id="exportMp4">🎬 Xuất MP4</button>
+    </div>
+
+    <div class="stickers">
+      <span>Chọn Sticker:</span>
+      <button class="sticker" data-type="cat">🐱</button>
+      <button class="sticker" data-type="slime">🟢</button>
+      <button class="sticker" data-type="bear">🐻</button>
+    </div>
+  </div>
+
+  <div id="loading" class="loading-hidden">
+    <p>Đang xử lý nèee ~ chờ chút xíu nha ~</p>
+    <div class="spinner"></div>
+  </div>
+
+  <button id="toggleMusic">🔇 Tắt/Mở Nhạc</button>
+
+  <script>
+    const music = document.getElementById("bg-music");
+    document.getElementById("toggleMusic").onclick = () => {
+      if (music.paused) {
+        music.play();
+      } else {
+        music.pause();
+      }
+    };
+  </script>
+  <script src="script.js"></script>
+</body>
+      </html>
+      
