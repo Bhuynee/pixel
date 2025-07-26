@@ -1,59 +1,161 @@
 const fileInput = document.getElementById("fileInput");
-const convertBtn = document.getElementById("convertBtn");
-const exportGif = document.getElementById("exportGif");
-const exportMp4 = document.getElementById("exportMp4");
-const pixelRange = document.getElementById("pixelRange");
-const filterSelect = document.getElementById("filterSelect");
-const previewArea = document.getElementById("previewArea");
-const loading = document.getElementById("loading");
-const stickers = document.querySelectorAll(".sticker");
+const preview = document.getElementById("preview");
+const loadingText = document.getElementById("loading-text");
+const loadingCircle = document.querySelector(".loading-circle");
 
-let selectedFile = null;
-let selectedSticker = null;
+const pixelSlider = document.getElementById("pixelSize");
+const filterSelect = document.getElementById("filter");
+const stickerButtons = document.querySelectorAll(".sticker-btn");
+const bgMusic = document.getElementById("bgMusic");
+const toggleMusicBtn = document.getElementById("toggleMusicBtn");
 
-fileInput.addEventListener("change", (e) => {
-  selectedFile = e.target.files[0];
-  previewArea.textContent = `📁 Đã chọn: ${selectedFile.name}`;
-});
-
-stickers.forEach((btn) => {
-  btn.addEventListener("click", () => {
-    selectedSticker = btn.dataset.type;
-    btn.classList.toggle("active");
-  });
-});
-
-convertBtn.addEventListener("click", () => {
-  if (!selectedFile) return alert("Chưa chọn file đâu nè!");
-  showLoading();
-
-  setTimeout(() => {
-    previewArea.innerHTML = `<canvas id="canvas" width="300" height="300"></canvas>`;
-    const ctx = document.getElementById("canvas").getContext("2d");
-    ctx.fillStyle = "#ffc0cb";
-    ctx.fillRect(0, 0, 300, 300);
-
-    ctx.font = "20px monospace";
-    ctx.fillStyle = "#333";
-    ctx.fillText("Đã pixel hoá ảnh/video!", 20, 150);
-
-    if (selectedSticker) ctx.fillText(`+ ${selectedSticker}`, 20, 180);
-    hideLoading();
-  }, 2000);
-});
-
-exportGif.addEventListener("click", () => {
-  alert("🎞 Xuất GIF nè (demo thôi, bản full dùng ffmpeg)");
-});
-
-exportMp4.addEventListener("click", () => {
-  alert("🎬 Xuất MP4 nè (demo thôi, bản full dùng ffmpeg)");
-});
-
+// Loading UI
 function showLoading() {
-  loading.classList.remove("loading-hidden");
+  loadingText.innerText = "Đang xử lý nèee ~ chờ chút xíu nha ~";
+  loadingCircle.style.display = "inline-block";
 }
 
 function hideLoading() {
-  loading.classList.add("loading-hidden");
-      
+  loadingText.innerText = "";
+  loadingCircle.style.display = "none";
+}
+
+// Fake convert (ảnh/video pixel hoá)
+function convertMedia() {
+  const file = fileInput.files[0];
+  if (!file) {
+    alert("Chưa chọn file gì hết trơn!");
+    hideLoading();
+    return;
+  }
+
+  showLoading();
+
+  setTimeout(() => {
+    preview.innerHTML = `<p style="font-size:1.2em">✅ Đã xử lý xong file: <b>${file.name}</b></p>`;
+    hideLoading();
+  }, 2000); // giả lập xử lý trong 2 giây
+}
+
+// Sticker
+let currentSticker = "";
+stickerButtons.forEach(btn => {
+  btn.addEventListener("click", () => {
+    currentSticker = btn.dataset.sticker;
+    stickerButtons.forEach(b => b.classList.remove("active"));
+    btn.classList.add("active");
+  });
+});
+
+// Xuất GIF (fake)
+function exportGIF() {
+  showLoading();
+  setTimeout(() => {
+    alert("🎉 GIF xuất thành công (fake)");
+    hideLoading();
+  }, 1500);
+}
+
+// Xuất MP4 (fake)
+function exportMP4() {
+  showLoading();
+  setTimeout(() => {
+    alert("🎬 MP4 xuất thành công (fake)");
+    hideLoading();
+  }, 1500);
+}
+
+// Nhạc
+function toggleMusic() {
+  if (bgMusic.paused) {
+    bgMusic.play();
+    toggleMusicBtn.innerText = "Tắt nhạc";
+  } else {
+    bgMusic.pause();
+    toggleMusicBtn.innerText = "Mở nhạc";
+  }
+}
+
+document.getElementById("convertBtn").addEventListener("click", convertMedia);
+document.getElementById("gifBtn").addEventListener("click", exportGIF);
+document.getElementById("mp4Btn").addEventListener("click", exportMPconst fileInput = document.getElementById("fileInput");
+const preview = document.getElementById("preview");
+const loadingText = document.getElementById("loading-text");
+const loadingCircle = document.querySelector(".loading-circle");
+
+const pixelSlider = document.getElementById("pixelSize");
+const filterSelect = document.getElementById("filter");
+const stickerButtons = document.querySelectorAll(".sticker-btn");
+const bgMusic = document.getElementById("bgMusic");
+const toggleMusicBtn = document.getElementById("toggleMusicBtn");
+
+// Loading UI
+function showLoading() {
+  loadingText.innerText = "Đang xử lý nèee ~ chờ chút xíu nha ~";
+  loadingCircle.style.display = "inline-block";
+}
+
+function hideLoading() {
+  loadingText.innerText = "";
+  loadingCircle.style.display = "none";
+}
+
+// Fake convert (ảnh/video pixel hoá)
+function convertMedia() {
+  const file = fileInput.files[0];
+  if (!file) {
+    alert("Chưa chọn file gì hết trơn!");
+    hideLoading();
+    return;
+  }
+
+  showLoading();
+
+  setTimeout(() => {
+    preview.innerHTML = `<p style="font-size:1.2em">✅ Đã xử lý xong file: <b>${file.name}</b></p>`;
+    hideLoading();
+  }, 2000); // giả lập xử lý trong 2 giây
+}
+
+// Sticker
+let currentSticker = "";
+stickerButtons.forEach(btn => {
+  btn.addEventListener("click", () => {
+    currentSticker = btn.dataset.sticker;
+    stickerButtons.forEach(b => b.classList.remove("active"));
+    btn.classList.add("active");
+  });
+});
+
+// Xuất GIF (fake)
+function exportGIF() {
+  showLoading();
+  setTimeout(() => {
+    alert("🎉 GIF xuất thành công (fake)");
+    hideLoading();
+  }, 1500);
+}
+
+// Xuất MP4 (fake)
+function exportMP4() {
+  showLoading();
+  setTimeout(() => {
+    alert("🎬 MP4 xuất thành công (fake)");
+    hideLoading();
+  }, 1500);
+}
+
+// Nhạc
+function toggleMusic() {
+  if (bgMusic.paused) {
+    bgMusic.play();
+    toggleMusicBtn.innerText = "Tắt nhạc";
+  } else {
+    bgMusic.pause();
+    toggleMusicBtn.innerText = "Mở nhạc";
+  }
+}
+
+document.getElementById("convertBtn").addEventListener("click", convertMedia);
+document.getElementById("gifBtn").addEventListener("click", exportGIF);
+document.getElementById("mp4Btn").addEventListener("click", exportMP
