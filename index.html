@@ -1,94 +1,42 @@
-<!DOCTYPE html><html lang="en">
+<!DOCTYPE html>
+<html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Pixel Converter Pro Vip Maximum</title>
+  <title>Pixel Converter Pro VIP</title>
   <style>
     body {
       font-family: 'Courier New', monospace;
-      background-color: #111;
+      background-color: #1a1a1a;
       color: #fff;
       text-align: center;
-      padding: 2rem;
+      padding: 20px;
     }
-    .container {
-      background: #222;
-      padding: 2rem;
-      border-radius: 20px;
-      box-shadow: 0 0 20px rgba(255, 0, 255, 0.3);
-      display: inline-block;
-    }
-    input, select, button {
-      margin: 1rem 0;
-      padding: 0.5rem;
-      border-radius: 12px;
+
+    input[type="file"] {
+      margin-top: 20px;
+      background: hotpink;
+      color: white;
+      padding: 10px;
+      border-radius: 10px;
       border: none;
-      font-size: 1rem;
-    }
-    button {
-      background-color: hotpink;
-      color: #111;
-      font-weight: bold;
       cursor: pointer;
     }
-    #preview {
-      margin-top: 2rem;
+
+    canvas {
+      margin-top: 30px;
+      border: 2px solid hotpink;
+      image-rendering: pixelated;
+      max-width: 100%;
     }
   </style>
 </head>
 <body>
-  <div class="container">
-    <h1>🌈 Pixel Converter Pro Vip Maximum 🌈</h1>
-    <p>Chọn ảnh hoặc video để chuyển thành phong cách pixel cute~</p><input type="file" id="fileInput" accept="image/*,video/*">
-<br>
-<label for="filter">Bộ lọc màu:</label>
-<select id="filter">
-  <option value="none">Không</option>
-  <option value="gameboy">GameBoy</option>
-  <option value="lava">Lava</option>
-  <option value="pastel">Pastel</option>
-</select>
-<br>
-<label for="sticker">Sticker:</label>
-<select id="sticker">
-  <option value="none">Không</option>
-  <option value="cat">🐱 Mèo</option>
-  <option value="slime">🟣 Slime</option>
-  <option value="bear">🧸 Gấu</option>
-</select>
-<br>
-<button id="convertBtn">✨ Convert Ngay ✨</button>
-<div id="preview"></div>
+  <h1>🌸 Pixel Converter Pro VIP Maximum 🌸</h1>
+  <p>Chọn một ảnh bất kỳ để hoá pixel nghệ thuật!</p>
+  <input type="file" id="fileInput" accept="image/*">
+  <br>
+  <canvas id="previewCanvas"></canvas>
 
-  </div>  <script>
-    const fileInput = document.getElementById('fileInput');
-    const convertBtn = document.getElementById('convertBtn');
-    const preview = document.getElementById('preview');
-    const filter = document.getElementById('filter');
-    const sticker = document.getElementById('sticker');
-
-    convertBtn.addEventListener('click', () => {
-      const file = fileInput.files[0];
-      if (!file) {
-        alert("Hãy chọn ảnh hoặc video trước đã nha ~ 😭");
-        return;
-      }
-
-      // Hiện preview tạm thời fake xử lý
-      const fileURL = URL.createObjectURL(file);
-      let output = '';
-
-      if (file.type.startsWith('image')) {
-        output = `<img src="${fileURL}" style="width:300px;border-radius:20px;">`;
-      } else if (file.type.startsWith('video')) {
-        output = `<video src="${fileURL}" controls style="width:300px;border-radius:20px;"></video>`;
-      }
-
-      if (sticker.value !== 'none') {
-        output += `<p style="font-size:3rem">${sticker.options[sticker.selectedIndex].text}</p>`;
-      }
-
-      preview.innerHTML = output + `<p style="margin-top:1rem;">✅ Đã chuyển kiểu pixel (${filter.value})</p>`;
-    });
-  </script></body>
+  <script src="script.js"></script>
+</body>
 </html>
