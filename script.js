@@ -1,7 +1,6 @@
 const fileInput = document.getElementById("fileInput");
 const pixelSlider = document.getElementById("pixelSlider");
 const convertBtn = document.getElementById("convertBtn");
-const loadingText = document.getElementById("loadingText");
 const previewContainer = document.getElementById("preview");
 const gifExportBtn = document.getElementById("exportGIF");
 const mp4ExportBtn = document.getElementById("exportMP4");
@@ -49,24 +48,19 @@ convertBtn.addEventListener("click", () => {
     return;
   }
 
-  loadingText.style.display = "block";
   previewContainer.innerHTML = "";
 
   const reader = new FileReader();
-
   reader.onload = (e) => {
     const url = e.target.result;
-
     if (file.type.startsWith("image/")) {
       convertImageToPixel(url);
     } else if (file.type.startsWith("video/")) {
       convertVideoToPixel(url);
     } else {
       alert("Chỉ hỗ trợ ảnh và video thôi nghenn~");
-      loadingText.style.display = "none";
     }
   };
-
   reader.readAsDataURL(file);
 });
 
@@ -81,12 +75,10 @@ function convertImageToPixel(url) {
     canvas.width = img.width;
     canvas.height = img.height;
 
-    // Apply pixelation
     ctx.drawImage(img, 0, 0, img.width / pixelSize, img.height / pixelSize);
     ctx.imageSmoothingEnabled = false;
     ctx.drawImage(canvas, 0, 0, img.width / pixelSize, img.height / pixelSize, 0, 0, img.width, img.height);
 
-    // Apply filter
     if (currentFilter !== "none") {
       ctx.fillStyle = getFilterColor(currentFilter);
       ctx.globalAlpha = 0.2;
@@ -94,7 +86,6 @@ function convertImageToPixel(url) {
       ctx.globalAlpha = 1;
     }
 
-    // Add sticker
     if (selectedSticker) {
       const stickerImg = new Image();
       stickerImg.src = `stickers/${selectedSticker}.png`;
@@ -102,12 +93,10 @@ function convertImageToPixel(url) {
         ctx.drawImage(stickerImg, 10, 10, 100, 100);
         previewContainer.appendChild(canvas);
         currentMedia = canvas;
-        loadingText.style.display = "none";
       };
     } else {
       previewContainer.appendChild(canvas);
       currentMedia = canvas;
-      loadingText.style.display = "none";
     }
   };
 }
@@ -128,10 +117,7 @@ function convertVideoToPixel(url) {
     currentMedia = video;
 
     const draw = () => {
-      if (video.paused || video.ended) {
-        loadingText.style.display = "none";
-        return;
-      }
+      if (video.paused || video.ended) return;
 
       ctx.drawImage(video, 0, 0, canvas.width / currentPixelLevel, canvas.height / currentPixelLevel);
       ctx.imageSmoothingEnabled = false;
@@ -149,10 +135,6 @@ function convertVideoToPixel(url) {
     };
 
     draw();
-  });
-
-  video.addEventListener("loadeddata", () => {
-    loadingText.style.display = "none";
   });
 }
 
@@ -178,9 +160,9 @@ imgExportBtn.addEventListener("click", () => {
 });
 
 gifExportBtn.addEventListener("click", () => {
-  alert("🎥 Tính năng xuất GIF đang được phát triển thêm!");
+  alert("🎥 Xuất GIF sẽ thêm sau nhé!");
 });
 
 mp4ExportBtn.addEventListener("click", () => {
-  alert("🎞️ Tính năng xuất MP4 yêu cầu tích hợp FFmpeg – t sẽ bổ sung tiếp!");
+  alert("🎞️ Cần tích hợp FFmpeg WebAssembly để xuất MP4.");
 });
