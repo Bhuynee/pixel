@@ -1,81 +1,186 @@
 const fileInput = document.getElementById("fileInput");
-const preview = document.getElementById("preview");
-const loadingText = document.getElementById("loading-text");
-const loadingCircle = document.querySelector(".loading-circle");
+const pixelSlider = document.getElementById("pixelSlider");
+const convertBtn = document.getElementById("convertBtn");
+const loadingText = document.getElementById("loadingText");
+const previewContainer = document.getElementById("preview");
+const gifExportBtn = document.getElementById("exportGIF");
+const mp4ExportBtn = document.getElementById("exportMP4");
+const imgExportBtn = document.getElementById("exportImage");
+const musicToggleBtn = document.getElementById("toggleMusic");
+const filterSelect = document.getElementById("filterSelect");
+const stickerOptions = document.querySelectorAll(".sticker-option");
 
-const pixelSlider = document.getElementById("pixelSize");
-const filterSelect = document.getElementById("filter");
-const stickerButtons = document.querySelectorAll(".sticker-btn");
-const bgMusic = document.getElementById("bgMusic");
-const toggleMusicBtn = document.getElementById("toggleMusicBtn");
+let audio = new Audio("cute-music.mp3");
+audio.loop = true;
 
-// Loading UI
-function showLoading() {
-  loadingText.innerText = "Đang xử lý nèee ~ chờ chút xíu nha ~";
-  loadingCircle.style.display = "inline-block";
-}
+let currentMedia = null;
+let currentPixelLevel = 10;
+let currentFilter = "none";
+let selectedSticker = null;
 
-function hideLoading() {
-  loadingText.innerText = "";
-  loadingCircle.style.display = "none";
-}
-
-// Fake convert (ảnh/video pixel hoá)
-function convertMedia() {
-  const file = fileInput.files[0];
-  if (!file) {
-    alert("Chưa chọn file gì hết trơn!");
-    hideLoading();
-    return;
+musicToggleBtn.addEventListener("click", () => {
+  if (audio.paused) {
+    audio.play();
+    musicToggleBtn.textContent = "🔊 Đang phát nhạc";
+  } else {
+    audio.pause();
+    musicToggleBtn.textContent = "🔇 Đã tắt nhạc";
   }
+});
 
-  showLoading();
+filterSelect.addEventListener("change", () => {
+  currentFilter = filterSelect.value;
+});
 
-  setTimeout(() => {
-    preview.innerHTML = `<p style="font-size:1.2em">✅ Đã xử lý xong file: <b>${file.name}</b></p>`;
-    hideLoading();
-  }, 2000); // giả lập xử lý trong 2 giây
-}
-
-// Sticker
-let currentSticker = "";
-stickerButtons.forEach(btn => {
+stickerOptions.forEach((btn) => {
   btn.addEventListener("click", () => {
-    currentSticker = btn.dataset.sticker;
-    stickerButtons.forEach(b => b.classList.remove("active"));
-    btn.classList.add("active");
+    selectedSticker = btn.getAttribute("data-sticker");
   });
 });
 
-// Xuất GIF (fake)
-function exportGIF() {
-  showLoading();
-  setTimeout(() => {
-    alert("🎉 GIF xuất thành công (fake)");
-    hideLoading();
-  }, 1500);
+pixelSlider.addEventListener("input", () => {
+  currentPixelLevel = parseInt(pixelSlider.value);
+});
+
+convertBtn.addEventListener("click", () => {
+  const file = fileInput.files[0];
+  if (!file) {
+    alert("😵 Hãy chọn ảnh hoặc video trước đã nha!");
+    return;
+  }
+
+  loadingText.style.display = "block";
+  previewContainer.innerHTML = "";
+
+  const reader = new FileReader();
+
+  reader.onload = (e) => {
+    const url = e.target.result;
+
+    if (file.type.startsWith("image/")) {
+      convertImageToPixel(url);
+    } else if (file.type.startsWith("video/")) {
+      convertVideoToPixel(url);
+    } else {
+      alert("Chỉ hỗ trợ ảnh và video thôi nghenn~");
+      loadingText.style.display = "none";
+    }
+  };
+
+  reader.readAsDataURL(file);
+});
+
+function convertImageToPixel(url) {
+  const img = new Image();
+  img.src = url;
+  img.onload = () => {
+    const canvas = document.createElement("canvas");
+    const ctx = canvas.getContext("2d");
+
+    const pixelSize = currentPixelLevel;
+    canvas.width = img.width;
+    canvas.height = img.height;
+
+    // Apply pixelation
+    ctx.drawImage(img, 0, 0, img.width / pixelSize, img.height / pixelSize);
+    ctx.imageSmoothingEnabled = false;
+    ctx.drawImage(canvas, 0, 0, img.width / pixelSize, img.height / pixelSize, 0, 0, img.width, img.height);
+
+    // Apply filter
+    if (currentFilter !== "none") {
+      ctx.fillStyle = getFilterColor(currentFilter);
+      ctx.globalAlpha = 0.2;
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      ctx.globalAlpha = 1;
+    }
+
+    // Add sticker
+    if (selectedSticker) {
+      const stickerImg = new Image();
+      stickerImg.src = `stickers/${selectedSticker}.png`;
+      stickerImg.onload = () => {
+        ctx.drawImage(stickerImg, 10, 10, 100, 100);
+        previewContainer.appendChild(canvas);
+        currentMedia = canvas;
+        loadingText.style.display = "none";
+      };
+    } else {
+      previewContainer.appendChild(canvas);
+      currentMedia = canvas;
+      loadingText.style.display = "none";
+    }
+  };
 }
 
-// Xuất MP4 (fake)
-function exportMP4() {
-  showLoading();
-  setTimeout(() => {
-    alert("🎬 MP4 xuất thành công (fake)");
-    hideLoading();
-  }, 1500);
+function convertVideoToPixel(url) {
+  const video = document.createElement("video");
+  video.src = url;
+  video.muted = true;
+  video.play();
+
+  video.addEventListener("play", () => {
+    const canvas = document.createElement("canvas");
+    const ctx = canvas.getContext("2d");
+    canvas.width = video.videoWidth;
+    canvas.height = video.videoHeight;
+
+    previewContainer.appendChild(canvas);
+    currentMedia = video;
+
+    const draw = () => {
+      if (video.paused || video.ended) {
+        loadingText.style.display = "none";
+        return;
+      }
+
+      ctx.drawImage(video, 0, 0, canvas.width / currentPixelLevel, canvas.height / currentPixelLevel);
+      ctx.imageSmoothingEnabled = false;
+      ctx.drawImage(canvas, 0, 0, canvas.width / currentPixelLevel, canvas.height / currentPixelLevel, 0, 0, canvas.width, canvas.height);
+
+      if (selectedSticker) {
+        const stickerImg = new Image();
+        stickerImg.src = `stickers/${selectedSticker}.png`;
+        stickerImg.onload = () => {
+          ctx.drawImage(stickerImg, 10, 10, 100, 100);
+        };
+      }
+
+      requestAnimationFrame(draw);
+    };
+
+    draw();
+  });
+
+  video.addEventListener("loadeddata", () => {
+    loadingText.style.display = "none";
+  });
 }
 
-// Nhạc
-function toggleMusic() {
-  if (bgMusic.paused) {
-    bgMusic.play();
-    toggleMusicBtn.innerText = "Tắt nhạc";
-  } else {
-    bgMusic.pause();
-    toggleMusicBtn.innerText = "Mở nhạc";
+function getFilterColor(type) {
+  switch (type) {
+    case "gameboy":
+      return "#a4c639";
+    case "lava":
+      return "#ff4500";
+    case "pastel":
+      return "#ffc0cb";
+    default:
+      return "transparent";
   }
 }
 
-document.getElementById("convertBtn").addEventListener("click", convertMedia);
-document.getElementById("gifBtn").addEventListener("click", exportGIF);
-document.getElementById("mp4Btn").addEventListener("click", exportMP
+imgExportBtn.addEventListener("click", () => {
+  if (!currentMedia) return;
+  const link = document.createElement("a");
+  link.download = "pixel-image.png";
+  link.href = currentMedia.toDataURL("image/png");
+  link.click();
+});
+
+gifExportBtn.addEventListener("click", () => {
+  alert("🎥 Tính năng xuất GIF đang được phát triển thêm!");
+});
+
+mp4ExportBtn.addEventListener("click", () => {
+  alert("🎞️ Tính năng xuất MP4 yêu cầu tích hợp FFmpeg – t sẽ bổ sung tiếp!");
+});
